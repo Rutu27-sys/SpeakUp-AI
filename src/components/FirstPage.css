@@ -1,0 +1,116 @@
+.MainDiv{
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 30%;
+    left: 10%;
+    text-align: left;
+}
+#head1{
+    font-family: 'Syne-Regular', cursive;
+    font-size: 15px;
+    line-height: 118%;
+    letter-spacing: -0.24px;
+    position: absolute;
+    color: #000000;
+    top: 0px;
+    left: 0px;
+    background-color: #DDF579;
+    border-radius: 30px;
+    padding: 5px 10px;
+}
+#head2{
+    font-family: 'Nunito-Regular', cursive;
+    font-size: 56px;
+    line-height: 118%;
+    color: #000000;
+    position: absolute;
+    left: 0px;
+    top: 50px;
+}
+#head3{
+    font-family: 'Port Lligat Sans', cursive;
+    font-size: 24px;
+    line-height: 118%;
+    position: absolute;
+    color: #777384;
+    top: 200px;
+    left: 0px;
+}
+#head4{
+    font-family: 'Syne-Regular', cursive;
+    background-color: #7046E8;
+    color: #FFFFFF;
+    position: absolute;
+    top: 290px;
+    padding: 8px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+#head4:hover{
+    background-color: #DDF579;
+    color: #000000;
+}
+#head5{
+    font-family: 'Syne-Regular', cursive;
+    background-color: #FFFFFF;;
+    position: absolute;
+    top: 290px;
+    left: 190px;
+    padding: 8px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+#head5:hover{
+    background-color: #000000;
+    color: #FFFFFF;
+}
+#head6{
+    font-family: 'Syne-Regular', cursive;
+    position: absolute;
+    top: 350px;
+    font-size: 15px;
+}
+.SecondDiv{
+    width: 30%;
+    height: 60%;
+    position: absolute;
+    top: 25%;
+    left: 60%;
+    border-radius: 30px;
+    text-align: left;
+    background-color: #EDE6FF;
+}
+#head7{
+    font-family: 'CourierPrime-Italic', cursive;
+    font-size: 14px;
+    background-color: #FFFFFF;;
+    position: absolute;
+    top: 40px;
+    left: 30px;
+    padding: 15px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+.head8{
+    font-family: 'CourierPrime-Italic', cursive;
+    font-size: 14px;
+    background-color: #FFFFFF;
+    width: 90%;
+    position: absolute;
+    top: 340px;
+    left: 30px;
+    padding:30px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+#head8{
+    color: #7046E8;
+    font-size: 11px;
+    font-weight: bolder;
+}
+#head9{
+    color: #000000;
+    font-size: 22px;
+    font-family: 'Syne-Regular', cursive;
+}

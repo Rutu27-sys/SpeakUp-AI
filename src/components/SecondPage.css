@@ -1,0 +1,17 @@
+.SecondPage{
+    background-color: #F8F7F2;
+    width: 100%;
+    height: 100vh;
+    
+}
+.Headings{
+    display: grid;
+    grid-template-columns: repeat(4, 350px); 
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 30px;
+    font-family:'Syne-Regular', cursive;
+    color: #000000;
+    top: 800px;
+}

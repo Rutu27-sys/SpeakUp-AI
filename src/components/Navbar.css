@@ -1,0 +1,48 @@
+.navbar{
+    color: #000000;
+}
+.logo{
+    justify-content: left;
+    align-items: left;
+    position: fixed;
+    padding: 20px 30px;
+}
+.navcenter {
+    display: grid;
+    grid-template-columns: repeat(3, 180px); 
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 30px;
+    z-index: 1000;
+    font-family:'Syne-Regular', cursive;
+}
+.navright {
+    display: grid;
+    grid-template-columns: repeat(2, 100px); 
+    justify-content: right;
+    align-items: right;
+    position: fixed;
+    gap: 10px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 45px;
+    z-index: 1000;
+    font-family:'Syne-Regular', cursive;
+}
+.navright button{
+    background-color: #7046E8;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.navright button:hover{
+    background-color: #DDF579;
+    color: #000000;
+}
