@@ -33,6 +33,12 @@ const FirstPage = () => {
         <div>Progress at your pace</div>
       </div>
     </div>
+
+    <div className="ThirdDiv">
+        <div id="Sec1"> REAL LIFE, WITH A REHEARSAL BUTTON.</div>
+        
+    </div>
+
     </div>
   )
 }
