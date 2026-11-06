@@ -1,0 +1,160 @@
+.SecondPage {
+    width: 100%;
+    background-color: #F8F7F2;
+    padding: 22px 7%;
+}
+.Headings {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    gap: 20px;
+    font-family: 'Syne-Regular', sans-serif;
+    font-size: 13px;
+    color: #17142A;
+}
+.ThirdDiv , .FourthDiv , .FifthDiv,.SixthDiv,.SeventhDiv {
+    width: 100%;
+    min-height: 500px;
+    background-color: #F8F7F2;
+    padding: 22px 7%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 35px;
+    margin-top: 80px;
+}
+.EigthDiv{
+    width: 100%;
+    min-height: 200px;
+    background-color: #F8F7F2;
+    padding: 22px 7%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 35px;
+    margin-top: 80px;
+}
+.CardWrapper ,.StepWrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.ColumnWrapper,.SixthWrapper,.SeventhWrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    column-gap: 30px;
+}
+.EigthWrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr ;
+    column-gap: 140px;
+}
+.CardThirdDiv {
+    width: 400px;
+    height: 280px;
+    background-color: #EDE6FF;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 40px 7%;
+}
+.CardTitle{
+    font-size: 15px;
+    font-family: 'Syne-Regular', sans-serif;
+}
+.CardHead{
+    font-size: 25px;
+    font-family: 'Port Lligat Sans', sans-serif;
+    color: #17142A;
+}
+.SmallHead{
+    color: #7046E8;
+    font-size: 13px;
+    font-family: 'Syne-Regular', sans-serif;
+}
+.BigHead{
+    color: #242036;
+    font-size: clamp(40px, 2vw, 56px);
+    font-family: 'Nunito-Regular', sans-serif;
+}
+.Step{
+    width: 400px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 40px 7%;
+}
+.StepTitle{
+    font-size: 60px;
+    font-family: 'Nunito-Regular', sans-serif;
+    color: #7046E8;
+}
+.LevelThirdDiv,.TokiCard{
+    width: 600px;
+    height: 380px;
+    background-color: #EDE6FF;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 15px;
+    padding: 35px;
+}
+.Level{
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    padding: 15px;
+    line-height: 1.3;
+}
+.LevelTitle,.Question{
+    font-size: 15px;
+    font-family: 'Nunito-Regular', sans-serif;
+    color: #17142A;
+}
+.LevelHead{
+    color: #777384;
+    font-size: 12px;
+    font-family: 'Syne-Regular', sans-serif;
+}
+.Column,.OtherCard,.LeftSide,.RightSide{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.WhiteBtn{
+    background-color: #FFFFFF;
+    width: 40%;
+    height: 10%;
+    border-radius: 10px;
+}
+.WhiteBtn:hover{
+    background-color: #17142A;
+    color: #FFFFFF;
+    transform: scale(1.1);
+}
+.TokiTalk{
+    background-color: #DDF579;
+    color: #392176;
+    padding: 8px;
+    border-radius: 8px;
+    width: 60%;
+    text-align: center;
+}
+.Q{
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 20px;
+}
+.Answer{
+    color: #777384;
+    font-size: 15px;
+}
+@media (max-width: 700px) {
+    .Headings {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 20px;
+    }
+}

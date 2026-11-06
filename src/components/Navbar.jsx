@@ -4,7 +4,7 @@ import './Navbar.css'
 
 const Navbar = () => {
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div className="logo">SpeakUp AI</div>
 
         <div className="navcenter">
@@ -14,10 +14,10 @@ const Navbar = () => {
         </div>
 
         <div className="navright">
-          <button to="Login"  >Login</button>
-          <button to="SignUp"  >Sign Up</button>
+          <button className="Login"  >Login</button>
+          <button className="SignUp"  >Sign Up</button>
         </div>
-    </div>
+    </nav>
   )
 }
 

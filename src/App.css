@@ -1,12 +1,24 @@
-*{
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-html, body, #root {
-  width: 100%;
-  height: 100%;
-  background-color: #F8F7F2;
+html {
+    scroll-behavior: smooth;
+}
+body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #F8F7F2;
+}
+#root {
+    width: 100%;
+    min-height: 100vh;
+}
+.MainPage {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 @font-face {
@@ -24,8 +36,8 @@ html, body, #root {
 @font-face {
   font-family: 'Nunito-Regular';
   src: url('./fonts/Nunito-Regular.ttf') format('truetype');
-  font-weight: 800;
-  font-style: bold;
+  font-weight: 400;
+  font-style: normal;
 }
 @font-face {
   font-family: 'Courier Prime-Regular';
