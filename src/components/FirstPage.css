@@ -6,6 +6,7 @@
     align-items: center;
     gap: 50px;
     padding: 65px 10%;
+    margin-top: 120px;
 }
 .MainDiv {
     width: 100%;
@@ -14,7 +15,7 @@
     align-items: flex-start;
     text-align: left;
 }
-.YellowBg {
+#head1 {
     font-family: 'Syne-Regular', sans-serif;
     font-size: 13px;
     color: #17142A;

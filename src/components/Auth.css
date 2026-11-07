@@ -1,0 +1,93 @@
+.SignUpAuth{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    min-height: 100vh;
+}
+.LeftPanel {
+    background-color: #392176;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 40px 7%;
+}
+.RightPanel{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 40px 7%;
+}
+.Logo{
+    color: #FFFFFF;
+}
+.FirstHead{
+    color: #DDF579;
+    font-size: 13px;
+    font-family: 'Syne-Regular', sans-serif;
+}
+.SecondHead{
+    color: #FFFFFF;
+    font-size: clamp(40px, 2vw, 56px);
+    font-family: 'Nunito-Regular', sans-serif;
+    line-height: 1.3;
+}
+.ThirdHead,.LastHead{
+    color: #DCD0F6;
+    font-size: 15px;
+    font-family: 'Port Lligat Sans', sans-serif;
+}
+.TokiAuthCard{
+    width: 500px;
+    height: 380px;
+    background-color: #4A318A;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 40px 7%;
+}
+.YellowAuthText{
+    font-family: 'Port Lligat Sans', sans-serif;
+    font-size: 13px;
+    color: #17142A;
+    background-color: #DDF579;
+    border-radius: 20px;
+    padding: 6px 12px;
+    width: fit-content;
+    margin-bottom: 22px;
+}
+.BlackAuthText{
+    color: #000000;
+    font-size: clamp(40px, 2vw, 56px);
+    font-family: 'Nunito-Regular', sans-serif;
+}
+.GreyAuthText{
+    color: #777384;
+    font-family: 'Syne-Regular', sans-serif;
+}
+.AuthBack{
+    width: fit-content;
+    padding: 8px 30px;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+}
+.GoogleAuth,.InputBox{
+    align-items: center;
+    padding: 8px 30px;
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+}
+.CreateAcc{
+    align-items: center;
+    padding: 8px 30px;
+    background-color: #7046E8;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+}

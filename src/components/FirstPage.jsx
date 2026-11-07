@@ -213,6 +213,7 @@ const FirstPage = () => {
     </div>
     
   </section>
+  
     </div>
   )
 }
