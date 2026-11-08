@@ -1,4 +1,4 @@
-.SignUpAuth{
+.SignUpAuth,.LoginPage{
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 100%;
@@ -18,6 +18,7 @@
     text-align: left;
     row-gap: 30px;
     padding: 40px 7%;
+    background-color: #F8F7F2;
 }
 .Logo{
     color: #FFFFFF;
@@ -39,8 +40,10 @@
     font-family: 'Port Lligat Sans', sans-serif;
 }
 .TokiAuthCard{
-    width: 500px;
-    height: 380px;
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    min-height: 220px;
     background-color: #4A318A;
     border-radius: 20px;
     display: flex;
@@ -64,15 +67,19 @@
     font-size: clamp(40px, 2vw, 56px);
     font-family: 'Nunito-Regular', sans-serif;
 }
-.GreyAuthText{
+.GreyAuthText , .LineBreak{
     color: #777384;
     font-family: 'Syne-Regular', sans-serif;
+    font-size: 15px;
+     text-align: center;
 }
 .AuthBack{
     width: fit-content;
     padding: 8px 30px;
     border-radius: 15px;
     background-color: #FFFFFF;
+    border: 1px solid #ddd;
+    cursor: pointer;
 }
 .GoogleAuth,.InputBox{
     align-items: center;
@@ -90,4 +97,45 @@
     border: none;
     border-radius: 10px;
     width: 100%;
+}
+form label{
+    color: #000000;
+    gap: 10px;
+}
+.InputContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+.ShowPasswordBtn {
+    padding: 10px 5px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    height: 30px;
+    margin-top: 5px;
+}
+@media screen and (max-width: 1024px) {
+    .SignUpAuth {
+        grid-template-columns: 1fr; 
+    }
+    .LeftPanel {
+        padding: 30px 5%;
+    }
+    .RightPanel {
+        padding: 30px 5%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .SecondHead, .BlackAuthText {
+        font-size: 32px;
+    }
+    .TokiAuthCard {
+        padding: 20px;
+    }
+    .RightPanel, .LeftPanel {
+        padding: 20px 5%;
+    }
 }

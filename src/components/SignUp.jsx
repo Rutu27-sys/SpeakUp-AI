@@ -1,7 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react';
 import './Auth.css'
 
 const SignUp = () => {
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Logging in with Data:', formData);
+    
+    // Add your backend authentication logic or API call here later
+    alert(`Welcome back, ${formData.email}! Logged in successfully.`);
+  };
+
   return (
     <div className='SignUpAuth'>
 
@@ -22,33 +47,36 @@ const SignUp = () => {
          <button className='AuthBack'>Back</button>
          <div className="YellowAuthText">YOUR FIRST SMALL STEP</div>
          <div className="BlackAuthText">Let’s find your voice.</div>
-         <div className="GreyAuthText">Create an account, then take a short assessment to get your personalized learning plan.</div>
+         <div className="GreyAuthText" style={{ textAlign: 'left' }}>Create an account, then take a short assessment to get your personalized learning plan.</div>
          <button className='GoogleAuth'>Continue with Google</button>
          <div className="LineBreak">or with email</div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
 
-            <div>
+            <div className='InputContainer'>
                 <label htmlFor="username">Your Name :</label>
-                <input type="text" id="username" className='InputBox' name="username"></input>
+                <input type="text" id="username" className='InputBox' name="username" value={formData.username} onChange={handleChange} required></input>
             </div>
 
-            <div>
+            <div className='InputContainer'>
                 <label htmlFor="email">Email :</label>
-                <input type="email" id="email" className='InputBox' name="email"></input>
+                <input type="email" id="email" className='InputBox' name="email" value={formData.email} onChange={handleChange} required></input>
             </div>
 
-            <div>
+            <div className='InputContainer'>
                 <label htmlFor="password">Password :</label>
-                <input  id="password" name="password" className='InputBox' minLength={6}></input>
-                <button type="button" >Show password
+                <input  type={showPassword ? 'text' : 'password'} id="password" name="password" className='InputBox' minLength={6} value={formData.password} onChange={handleChange} required></input>
+                <button type="button" onClick={() => setShowPassword((prev) => !prev)}
+                className="ShowPasswordBtn">{showPassword ? 'Hide' : 'Show'}
                 </button>
             </div>
-        
+           
+           <button type="submit" className="CreateAcc" >Create account & find my level</button>
+
         </form>
 
-        <button className="CreateAcc">Create account & find my level</button>
-        <div className="GreyAuthText" id='AlreadyAcc'>Already have an account?  Log in</div>
+        
+        <a className="GreyAuthText" id='AlreadyAcc' href="#login">Already have an account?  Log in</a>
       </div>
     </div>
   )

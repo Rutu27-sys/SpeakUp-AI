@@ -3,6 +3,7 @@ import './App.css'
 import Navbar from './components/Navbar.jsx'
 import FirstPage from './components/FirstPage.jsx'
 import SignUp from './components/SignUp.jsx'
+import Login from './components/Login.jsx'
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
       <Navbar />
       <FirstPage />
       <SignUp />
+      <Login />
     </div>
   )
 }
