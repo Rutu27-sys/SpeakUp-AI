@@ -1,0 +1,73 @@
+.AssesmentPage {
+    width: 100%;
+    background-color: #F8F7F2;
+    padding: 22px 7%;
+}
+.AssesmentNav,.TopProgressBar{
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 7%;
+    background-color: #F8F7F2;
+}
+.AssesmentBlueText{
+    color: #7046E8;
+    font-size: 13px;
+    font-family: 'Syne-Regular', sans-serif;
+    text-align: left;
+    padding: 0px 7%;
+}
+.AssesmentBlackText{
+    color: #242036;
+    font-size: clamp(15px, 2vw, 56px);
+    font-family: 'Nunito-Regular', sans-serif;
+    text-align: left;
+    padding: 0px 7%;
+}
+.AssesmentGreyText{
+    color: #777384;
+    font-size: 12px;
+    font-family: 'Syne-Regular', sans-serif;
+    text-align: left;
+    padding: 0px 7%;
+}
+.AssesmentPageGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 150px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 30px
+}
+.AssesmentLeftPanel {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 40px 7%;
+    
+}
+.AssesmentRightPanel{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 40px 7%;
+    row-gap: 30px;
+}
+.AssesmentTokiCard{
+    width: 140%;
+    min-height: 150px;
+    border-radius: 50%;
+    background-color: #EDE6FF;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    row-gap: 30px;
+    padding: 20px 7%;
+}
+.AssesmentTokiImg{
+    width: 200px;
+    height: 200px;
+}
