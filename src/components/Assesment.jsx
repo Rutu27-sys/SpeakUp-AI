@@ -1,6 +1,90 @@
-import React from 'react'
-import './Assesment.css'
-const Assesment = () => {
+import React, { useState, useEffect } from 'react';
+import './Assesment.css';
+
+const Assessment = () => {
+
+  const [isRecording, setIsRecording] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [transcripts, setTranscripts] = useState({ 1: '', 2: '', 3: '' });
+  const [recognition, setRecognition] = useState(null);
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recog = new SpeechRecognition();
+      recog.continuous = true;
+      recog.interimResults = true;
+
+      recog.onresult = (event) => {
+        let interim = '';
+        let final = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            final += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+
+        if (final) {
+          setTranscripts(prev => ({
+            ...prev,
+            [currentQuestion]: prev[currentQuestion] ? prev[currentQuestion] + ' ' + final : final
+          }));
+        }
+      };
+
+      recog.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        setIsRecording(false);
+      };
+
+      recog.onend = () => {
+        setIsRecording(false);
+      };
+
+      setRecognition(recog);
+    }
+  }, [currentQuestion]);
+
+  const handleStartRecording = () => {
+    if (recognition) {
+      try {
+        recognition.start();
+        setIsRecording(true);
+      } catch (e) {
+        console.log('Recognition already started');
+      }
+    } else {
+      setIsRecording(true);
+      setTranscripts(prev => ({
+        ...prev,
+        [currentQuestion]: 'Listening simulation: Tell me a little about yourself...'
+      }));
+    }
+  };
+
+  const handleStopRecording = () => {
+    if (recognition) {
+      recognition.stop();
+    }
+    setIsRecording(false);
+  };
+
+  const handleReRecord = () => {
+    setTranscripts(prev => ({ ...prev, [currentQuestion]: '' }));
+    setIsRecording(false);
+  };
+
+  const currentTranscript = transcripts[currentQuestion];
+
+  const getQuestionPrompt = () => {
+    if (currentQuestion === 1) return '“Hi! Tell me a little about yourself and something you enjoy doing.”';
+    if (currentQuestion === 2) return '“Considering we are strangers. Can you ask directions for nearest metro station ?”';
+    return '“Tell me about a time you needed help with a difficult task and how you asked for it.”';
+  };
+
   return (
     <div className='AssementPage' id='AssesmentPage'>
 
@@ -11,56 +95,98 @@ const Assesment = () => {
       </div>
 
       <div className="TopProgressBar">
-        <div className="StepIndicator"> 1. Introduce yourself</div>
-        <div className="StepIndicator"> 2. Ask for directions</div>
-        <div className="StepIndicator"> 3. Ask for support</div>
+        <div className={`StepIndicator ${currentQuestion === 1 ? 'active' : ''}`}>1. Introduce yourself </div>
+        <div className={`StepIndicator ${currentQuestion === 2 ? 'active' : ''}`}>2. Ask for directions </div>
+        <div className={`StepIndicator ${currentQuestion === 3 ? 'active' : ''}`}>3. Ask for support </div>
       </div>
+
       <div className="AssesmentText">
-      <div className="AssesmentBlueText">LET’S FIND YOUR STARTING POINT</div>
-      <div className="AssesmentBlackText" id='AssementHeadText'>First, just be yourself.</div>
-      <div className="AssesmentGreyText">Three short responses. No pass or fail. This helps Toki build a plan around your voice.</div>
-      </div>
-<div className="AssesmentPageGrid">
-<div className="AssesmentLeftPanel">
-      <div className="AssesmentTokiCard">
-        <div className="AssesmentBlueText">QUESTION 1 OF 3 · EVERYDAY INTRODUCTIONS</div>
-        <div className="AssesmentTokiImg"></div>
-        <div className="AssesmentBlackText">“Hi! Tell me a little about yourself and something you enjoy doing.”</div>
-        <div className="AssementGreytext">Imagine we’ve just met at a class. A few sentences are plenty.</div>
+        <div className="AssesmentBlueText">LET’S FIND YOUR STARTING POINT</div>
+        <div className="AssesmentBlackText" id='AssementHeadText'>First, just be yourself.</div>
+        <div className="AssesmentGreyText">Three short responses. No pass or fail. This helps Toki build a plan around your voice.</div>
       </div>
 
-      <div className="ListeningCard">
-        <div className="Microphone">Microphone connected · Not recording</div>
-        <div className="VoiceWave"></div>
-        <button className='StartRecording'>Start Recording</button>
-        <button className='StopRecording'>Stop recording</button>
-        <div className="AssesmentGreyText">Recording starts only when you press the microphone. Review or re-record your answer before continuing.</div>
-      </div>
-</div>
+      <div className="AssesmentPageGrid">
+        <div className="AssesmentLeftPanel">
+          <div className="AssesmentTokiCard">
+            <div className="AssesmentBlueText">QUESTION {currentQuestion} OF 3</div>
+            <div className="AssesmentTokiImg"></div>
+            <div className="AssesmentBlackText" id='AssesmentCardHead'>
+              {getQuestionPrompt()}
+            </div>
+            <div className="AssesmentGreyText">Imagine we’ve just met at a class. A few sentences are plenty.</div>
+          </div>
 
-<div className="AssesmentRightPanel">
+          <div className="ListeningCard">
+            <div className="Microphone">
+              {isRecording ? '🔴 Microphone active · Recording...' : '🟢 Microphone connected · Ready'}
+            </div>
 
-      <div className="AssesmentNote">
-        <div className="AssesmentBlueText">A NOTE FROM TOKI</div>
-        <div className="AssesmentBlackText">Not a test. A hello.</div>
-        <div className="AssesmentGreyText">Pause if you need to. Use your own words. There isn’t a “right” personality or accent here.</div>
-        <div className="AssesmentBlackText">What we’ll notice</div>
-        <div className="AssesmentGreyText">1. Clarity: how easily your ideas come through. <br></br>
-                                           2. Response speed: how long it takes to begin speaking.
+            <div className={`VoiceWaveExpanded ${isRecording ? 'active' : ''}`}>
+              {currentTranscript ? (
+                <div className="FullTranscriptBox">
+                  <span className="TranscriptLabel">What you've said:</span>
+                  <p className="LiveTranscriptText">{currentTranscript}</p>
+                </div>
+              ) : (
+                <div className="WaveBarsContainer">
+                  {[...Array(14)].map((_, i) => (
+                    <span key={i} className={`WaveBar ${isRecording ? 'animate' : ''}`}></span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="ButtonRow">
+              <button  className='StartRecording'  onClick={handleStartRecording} disabled={isRecording} >Start Recording</button>
+              <button className='StopRecording' onClick={handleStopRecording} disabled={!isRecording}>Stop Recording</button>
+              {currentTranscript && !isRecording && (
+                <button className='ReRecordBtn' onClick={handleReRecord}>Re-record ↺</button>
+              )}
+            </div>
+
+            <div className="AssesmentGreyText">
+              Recording starts only when you press the microphone. Review or re-record your answer before continuing.
+            </div>
+          </div>
         </div>
 
-        <div className="Yellowcard">
-            <div className="AssesmentBlueText">YOUR MIC, YOUR CONTROL</div>
-            <div className="AssesmentGreyText">Ready → Start recording Recording → Stop & review Review → Re-record or continue<br></br>
-            Can’t hear yourself? Check your browser microphone permission or change your input in audio settings.</div>
+        <div className="AssesmentRightPanel">
+          <div className="AssesmentNote">
+            <div className="AssesmentBlueText">A NOTE FROM TOKI</div>
+            <div className="AssesmentBlackText">Not a test. A hello.</div>
+            <div className="AssesmentGreyText">Pause if you need to. Use your own words. There isn’t a “right” personality or accent here.</div>
+            
+            <div className="AssesmentBlackText" style={{ fontSize: '15px' }}>What we’ll notice</div>
+            <div className="AssesmentGreyText">
+              1. Clarity: how easily your ideas come through.<br />
+              2. Response speed: how long it takes to begin speaking.
+            </div>
+
+            <div className="Yellowcard">
+              <div className="AssesmentBlueText">YOUR MIC, YOUR CONTROL</div>
+              <div className="AssesmentGreyText">
+                Ready → Start recording<br />
+                Recording → Stop & review<br />
+                Review → Re-record or continue
+              </div>
+            </div>
+
+            <div className="QuestionNavRow">
+              {currentQuestion > 1 && (
+                <button className='PrevQuestion' onClick={() => setCurrentQuestion(prev => Math.max(prev - 1, 1))}> ← Prev
+                </button>
+              )}
+              <button className='NextQuestion' onClick={() => setCurrentQuestion(prev => (prev < 3 ? prev + 1 : 1))}>
+                {currentQuestion === 3 ? 'Finish Assessment →' : 'Next question →'}
+              </button>
+            </div>
+          </div>
         </div>
 
-        <button className='NextQuestion'>Next question →</button>
       </div>
-</div>
-</div>
     </div>
-  )
-}
+  );
+};
 
-export default Assesment
+export default Assessment;

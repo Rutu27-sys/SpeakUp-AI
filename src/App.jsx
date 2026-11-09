@@ -18,10 +18,11 @@ function App() {
   }
 
   return (
-    <div className="MainPage">
-      <Navbar onLoginClick={()=> setCurrentView('login')}
+    /*<div className="MainPage">
+     <Navbar onLoginClick={()=> setCurrentView('login')}
               onSignUpClick={()=> setCurrentView('signup')} />
-      <FirstPage />
+      <FirstPage /> */
+      <div className="MainPage">
       <Assesment />
     </div>
   )

@@ -1,73 +1,265 @@
 .AssesmentPage {
-    width: 100%;
+    width: 100vw;
+    min-height: 100vh;
     background-color: #F8F7F2;
-    padding: 22px 7%;
+    padding: 10px 3%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
 }
-.AssesmentNav,.TopProgressBar{
-    height: 75px;
+.AssesmentNav{
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0px 7%;
+    padding: 0px 4%;
     background-color: #F8F7F2;
+    font-size: 13px;
+}
+.SaveAndExit {
+    background: #FFFFFF;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    color: #777384;
+    font-size: 12px;
+    cursor: pointer;
+}
+.SaveAndExit:hover{
+    background-color: #7046E8;
+    color: white;
+}
+.TopProgressBar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #777384;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.StepIndicator {
+    padding: 4px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.StepIndicator.active {
+    background-color: #EDE6FF;
+    color: #7046E8;
+    font-weight: bold;
+}
+.AssesmentText{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
 .AssesmentBlueText{
     color: #7046E8;
     font-size: 13px;
     font-family: 'Syne-Regular', sans-serif;
     text-align: left;
-    padding: 0px 7%;
+    padding: 0px 5%;
 }
 .AssesmentBlackText{
     color: #242036;
-    font-size: clamp(15px, 2vw, 56px);
+    font-size: clamp(20px, 1.8vw, 22px);
     font-family: 'Nunito-Regular', sans-serif;
     text-align: left;
-    padding: 0px 7%;
+    padding: 0px 5%;
 }
 .AssesmentGreyText{
-    color: #777384;
-    font-size: 12px;
+   color: #777384;
+    font-size: 13px;
     font-family: 'Syne-Regular', sans-serif;
     text-align: left;
-    padding: 0px 7%;
+    padding: 0px 5%;
+    line-height: 1.3;
 }
-.AssesmentPageGrid{
+.AssesmentPageGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 150px;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 20px;
     width: 100%;
-    max-width: 1200px;
-    padding: 30px
+    max-width: 1250px;
+    margin: 0 auto;
+    padding-bottom: 10px;
 }
-.AssesmentLeftPanel {
+.AssesmentLeftPanel, .AssesmentRightPanel {
     display: flex;
     flex-direction: column;
-    text-align: left;
-    row-gap: 30px;
-    padding: 40px 7%;
-    
+    gap: 35px;
 }
-.AssesmentRightPanel{
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    padding: 40px 7%;
-    row-gap: 30px;
-}
-.AssesmentTokiCard{
-    width: 140%;
-    min-height: 150px;
-    border-radius: 50%;
+.AssesmentTokiCard {
     background-color: #EDE6FF;
-    border-radius: 20px;
+    border-radius: 16px;
+    padding: 15px 20px;
     display: flex;
     flex-direction: column;
-    text-align: left;
-    row-gap: 30px;
-    padding: 20px 7%;
+    gap: 10px;
+    position: relative;
+}
+#AssesmentCardHead {
+    color: #17142A;
+    font-size: 18px;
+    font-family: 'Nunito-Regular', sans-serif;
+    font-weight: bold;
 }
 .AssesmentTokiImg{
-    width: 200px;
+   width: 200px;
     height: 200px;
+    background: #7046E8;
+    border-radius: 50%;
+}
+.ListeningCard {
+   background-color: #FFFFFF;
+    border-radius: 16px;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    margin-bottom: 10px;
+}
+.ButtonRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 0 2%;
+}
+.StartRecording, .StopRecording, .ReRecordBtn {
+    background-color: #7046E8;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+.StopRecording {
+    background-color: #555;
+}
+.StartRecording:disabled, .StopRecording:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.ReRecordBtn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+.VoiceWave {
+    height: 35px;
+    background: #F8F7F2;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    overflow: hidden;
+}
+.VoiceWaveExpanded {
+    min-height: 75px;
+    max-height: 110px;
+    background: #F8F7F2;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    overflow-y: auto;
+}
+.WaveBarsContainer {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.WaveBar {
+    width: 3px;
+    height: 10px;
+    background: #ccc;
+    border-radius: 2px;
+}
+.WaveBar.animate {
+    animation: bounce 0.5s infinite alternate;
+}
+
+@keyframes bounce {
+    to { height: 25px; background: #7046E8; }
+}
+.FullTranscriptBox {
+    width: 100%;
+    text-align: left;
+}
+.TranscriptLabel {
+    font-size: 9px;
+    color: #7046E8;
+    font-weight: bold;
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.LiveTranscriptText {
+    font-size: 12px;
+    color: #242036;
+    font-weight: 600;
+    line-height: 1.4;
+    display: inline;
+}
+.AssesmentNote {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+.Yellowcard {
+    background-color: #F9FBE7;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.QuestionNavRow {
+    display: flex;
+    gap: 10px;
+}
+.PrevQuestion {
+    background-color: #f0edff;
+    color: #7046E8;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+.PrevQuestion:hover {
+    background-color: #e2daf9;
+}
+.NextQuestion {
+    flex: 1;
+    background-color: #EDE6FF;
+    color: #7046E8;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+.NextQuestion:hover {
+    background-color: #7046E8;
+    color: #FFFFFF;
 }
