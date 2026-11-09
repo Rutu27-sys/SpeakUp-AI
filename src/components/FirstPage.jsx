@@ -70,7 +70,7 @@ const FirstPage = () => {
 
     </section>
 
-    <section className='FourthDiv'>
+    <section className='FourthDiv'id='HowItWorks'>
 
       <div id="Div1" className='SmallHead'> FROM “WHAT IF” TO “I’VE GOT THIS”</div>
       <div id="Div2"className='BigHead'>Small steps. Real speaking practice.</div>
@@ -96,7 +96,7 @@ const FirstPage = () => {
 
     </section>
 
-  <section className='FifthDiv'>
+  <section className='FifthDiv' id='PracticeScenarios'>
 
     <div className="ColumnWrapper">
 
@@ -128,7 +128,7 @@ const FirstPage = () => {
     </div>
   </section>
 
-  <section className='SixthDiv'>
+  <section className='SixthDiv' id='MeetToki'>
       <div className="SixthWrapper">
         <div className="TokiCard">
           <div className="TokiImg"></div>

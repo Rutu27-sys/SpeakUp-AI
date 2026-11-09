@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Auth.css'
 
-const SignUp = () => {
+const SignUp = ({onBack}) => {
 
   const [formData, setFormData] = useState({
     username: '',
@@ -19,12 +19,24 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with Data:', formData);
-    
-    // Add your backend authentication logic or API call here later
-    alert(`Welcome back, ${formData.email}! Logged in successfully.`);
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('token', data.token); 
+        alert(`Welcome, ${data.username}! Account created.`);
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error('Signup error:', err);
+    }
   };
 
   return (
@@ -44,7 +56,7 @@ const SignUp = () => {
 
       <div className="RightPanel">
 
-         <button className='AuthBack'>Back</button>
+         <button className='AuthBack' type='button' onClick={onBack}>Back</button>
          <div className="YellowAuthText">YOUR FIRST SMALL STEP</div>
          <div className="BlackAuthText">Let’s find your voice.</div>
          <div className="GreyAuthText" style={{ textAlign: 'left' }}>Create an account, then take a short assessment to get your personalized learning plan.</div>

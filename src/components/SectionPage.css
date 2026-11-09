@@ -19,9 +19,10 @@
     padding: 22px 7%;
     display: flex;
     flex-direction: column;
+    align-items: center;
     text-align: left;
     row-gap: 35px;
-    margin-top: 80px;
+    margin-top: 150px;
 }
 .EigthDiv{
     width: 100%;
@@ -36,21 +37,29 @@
 }
 .CardWrapper ,.StepWrapper{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
 }
 .ColumnWrapper,.SixthWrapper,.SeventhWrapper{
     display: grid;
-    grid-template-columns: 1fr 1fr ;
-    column-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    align-items: left;
 }
 .EigthWrapper{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr ;
-    column-gap: 140px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
 }
 .CardThirdDiv {
-    width: 400px;
-    height: 280px;
+    width: 100%;
+    min-height: 250px;
     background-color: #EDE6FF;
     border-radius: 20px;
     display: flex;

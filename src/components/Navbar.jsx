@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-scroll'
 import './Navbar.css'
 
-const Navbar = () => {
+const Navbar = ({onLoginClick,onSignUpClick}) => {
   return (
     <nav className="navbar">
       <div className="logo">SpeakUp AI</div>
@@ -14,8 +14,8 @@ const Navbar = () => {
         </div>
 
         <div className="navright">
-          <button className="Login"  >Login</button>
-          <button className="SignUp"  >Sign Up</button>
+          <button className="Login"  onClick={onLoginClick}>Login</button>
+          <button className="SignUp"  onClick={onSignUpClick}>Sign Up</button>
         </div>
     </nav>
   )

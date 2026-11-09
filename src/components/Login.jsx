@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Auth.css'
 
-const Login = () => {
+const Login = ({onBack}) => {
    const [formData, setFormData] = useState({
       email: '',
       password: '',
@@ -17,10 +17,24 @@ const Login = () => {
       }));
     };
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with Data:', formData);
-    alert(`Welcome back, ${formData.email}! Logged in successfully.`);
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('token', data.token); 
+        alert(`Welcome back, ${data.username}! Logged in.`);
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+    }
   };
 
   return (
@@ -40,7 +54,7 @@ const Login = () => {
 
       <div className="RightPanel">
 
-         <button className='AuthBack'>Back</button>
+         <button className='AuthBack' onClick={onBack} type='button'>Back</button>
          <div className="YellowAuthText">YOUR LEARNING STUDIO</div>
          <div className="BlackAuthText">Ready for another try?</div>
          <div className="GreyAuthText" style={{ textAlign: 'left' }}>Log in to continue your personalized learning path.</div>

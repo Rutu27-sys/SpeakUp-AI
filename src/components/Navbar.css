@@ -33,6 +33,11 @@
 .tag:hover {
     color: #7046E8;
 }
+.tag.active {
+    color: #7046E8; 
+    font-weight: bold;
+    border-bottom: 2px solid #7046E8;
+}
 .navright {
     display: flex;
     align-items: center;

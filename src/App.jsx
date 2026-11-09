@@ -7,12 +7,20 @@ import Login from './components/Login.jsx'
 
 function App() {
 
+  const [currentView,setCurrentView] = useState('landing') ;
+
+  if(currentView === 'login'){
+    return <Login onBack={() => setCurrentView('landing')} />;
+  }
+  if(currentView === 'signup'){
+    return <SignUp onBack={()=> setCurrentView('landing')} />;
+  }
+
   return (
     <div className="MainPage">
-      <Navbar />
+      <Navbar onLoginClick={()=> setCurrentView('login')}
+              onSignUpClick={()=> setCurrentView('signup')} />
       <FirstPage />
-      <SignUp />
-      <Login />
     </div>
   )
 }
