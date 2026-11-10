@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Auth.css'
 
-const Login = ({onBack}) => {
+const Login = ({onBack, onLoginSuccess}) => {
    const [formData, setFormData] = useState({
       email: '',
       password: '',
@@ -28,7 +28,7 @@ const Login = ({onBack}) => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token); 
-        alert(`Welcome back, ${data.username}! Logged in.`);
+        onLoginSuccess(data);
       } else {
         alert(data.message);
       }

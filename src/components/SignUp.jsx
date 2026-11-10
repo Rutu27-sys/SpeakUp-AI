@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Auth.css'
 
-const SignUp = ({onBack}) => {
+const SignUp = ({onBack, onSignupSuccess}) => {
 
   const [formData, setFormData] = useState({
     username: '',
@@ -29,8 +29,8 @@ const SignUp = ({onBack}) => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('token', data.token); 
-        alert(`Welcome, ${data.username}! Account created.`);
+        alert(`Account created successfully, ${data.username}! Please log in.`);
+        onSignupSuccess(); 
       } else {
         alert(data.message);
       }

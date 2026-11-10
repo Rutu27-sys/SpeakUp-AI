@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Assesment.css';
 
-const Assessment = () => {
+const Assessment = ({ user, onAssessmentComplete }) => {
 
   const [isRecording, setIsRecording] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(1);
@@ -26,7 +26,6 @@ const Assessment = () => {
             interim += event.results[i][0].transcript;
           }
         }
-
         if (final) {
           setTranscripts(prev => ({
             ...prev,
@@ -84,6 +83,25 @@ const Assessment = () => {
     if (currentQuestion === 2) return '“Considering we are strangers. Can you ask directions for nearest metro station ?”';
     return '“Tell me about a time you needed help with a difficult task and how you asked for it.”';
   };
+
+  const handleFinishAssessment = async () => {
+  try {
+    const userId = user?.id || localStorage.getItem('userId'); 
+    const response = await fetch('http://localhost:5000/api/evaluate-assessment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, transcripts })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(`Toki says: ${data.evaluation.feedback}`);
+      onAssessmentComplete(); 
+    }
+  } catch (err) {
+    console.error('Error submitting assessment:', err);
+  }
+};
 
   return (
     <div className='AssementPage' id='AssesmentPage'>
@@ -177,9 +195,13 @@ const Assessment = () => {
                 <button className='PrevQuestion' onClick={() => setCurrentQuestion(prev => Math.max(prev - 1, 1))}> ← Prev
                 </button>
               )}
-              <button className='NextQuestion' onClick={() => setCurrentQuestion(prev => (prev < 3 ? prev + 1 : 1))}>
-                {currentQuestion === 3 ? 'Finish Assessment →' : 'Next question →'}
-              </button>
+              <button className='NextQuestion' onClick={() => {
+                  if (currentQuestion === 3) {
+                  handleFinishAssessment();}
+                  else { setCurrentQuestion(prev => prev + 1); }
+              }} >
+              {currentQuestion === 3 ? 'Finish Assessment →' : 'Next question →'}
+             </button>
             </div>
           </div>
         </div>
