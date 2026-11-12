@@ -25,7 +25,7 @@ function App() {
         />
       );
     }
-    return <Dashboard user={user} />;
+    return <Dashboard onLogout={() => setUser(null)} user={user} />;
   }
   if (currentView === 'login') {
     return <Login onLoginSuccess={handleLoginSuccess} onBack={() => setCurrentView('landing')} />;

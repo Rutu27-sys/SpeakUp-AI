@@ -86,18 +86,29 @@ const Assessment = ({ user, onAssessmentComplete }) => {
 
   const handleFinishAssessment = async () => {
   try {
-    const userId = user?.id || localStorage.getItem('userId'); 
+    const userId = user?.userId || user?._id || user?.id || localStorage.getItem('userId');
+
+    if (!userId) {
+      alert('User ID missing. Please log in again.');
+      return;
+    }
+
     const response = await fetch('http://localhost:5000/api/evaluate-assessment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, transcripts })
     });
 
-    const data = await response.json();
-    if (response.ok) {
-      alert(`Toki says: ${data.evaluation.feedback}`);
-      onAssessmentComplete(); 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error response:', errorText);
+      alert(`Server error (${response.status}): Could not evaluate assessment.`);
+      return;
     }
+
+    const data = await response.json();
+    alert(`Toki says: ${data.evaluation.feedback}`);
+    onAssessmentComplete();
   } catch (err) {
     console.error('Error submitting assessment:', err);
   }

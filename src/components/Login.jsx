@@ -17,7 +17,7 @@ const Login = ({onBack, onLoginSuccess}) => {
       }));
     };
   
-    const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:5000/api/login', {
@@ -28,6 +28,7 @@ const Login = ({onBack, onLoginSuccess}) => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token); 
+        localStorage.setItem('userId', data.userId); 
         onLoginSuccess(data);
       } else {
         alert(data.message);

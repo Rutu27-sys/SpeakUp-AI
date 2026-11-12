@@ -1,0 +1,498 @@
+.AppLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f7f2;
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+}
+.AppSidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #eae8e4;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+}
+.SidebarLogoArea {
+  padding-bottom: 1.5rem;
+}
+.SidebarLogoText {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+}
+.SidebarNavGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.SidebarGroupTitle {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+.SidebarNavItem {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.SidebarNavItem:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+.SidebarNavItem.active {
+  background: #ede9fe;
+  color: #6d28d9;
+  font-weight: 600;
+}
+.TokiSidebarCard {
+  background: #F0F8D8;
+  border-radius: 14px;
+  padding: 1rem;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.TokiCardAvatar {
+  font-size: 1.5rem;
+}
+.TokiSidebarCard strong {
+  font-size: 0.9rem;
+  color: #111;
+  line-height: 1.2;
+}
+.TokiSidebarCard p {
+  font-size: 0.78rem;
+  color: #78350f;
+  margin: 0;
+  line-height: 1.4;
+}
+.TokiSig {
+  font-size: 0.7rem;
+  color: #92400e;
+  font-weight: 600;
+}
+.SidebarFooterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 1rem;
+}
+.SidebarFooterItem {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.SidebarFooterItem:hover {
+  background: #f9fafb;
+  color: #111;
+}
+.SidebarUserProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+.SidebarUserProfile:hover {
+  background: #f3f4f6;
+}
+.UserAvatarBubble {
+  width: 36px;
+  height: 36px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.UserInfoText {
+  display: flex;
+  flex-direction: column;
+}
+.UserName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111;
+}
+.UserSubText {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+.AppMainContent {
+  flex: 1;
+  padding: 1.5rem 3rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.MainTopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.AppMyLearning {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.TopBarRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.StreakPill {
+  background: #fef08a;
+  color: #713f12;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+}
+.BellBtn {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.StatusGreenDot {
+  width: 10px;
+  height: 10px;
+  background: #10b981;
+  border-radius: 50%;
+}
+.DashboardHeroArea {
+  margin-bottom: 3rem;
+}
+.HeroDateText {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+}
+.HeroGreeting {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -1px;
+  margin-bottom: 0.3rem;
+}
+.HeroSubText {
+  color: #4b5563;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+.MetricsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+.MetricCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.MetricLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+.MetricValue {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111;
+  margin: 0.25rem 0;
+}
+.MetricDetail {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+.MetricDetail.unlocked {
+  color: #059669;
+  font-weight: 500;
+}
+.DashboardGridColumns {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2rem;
+}
+.LeftColumnFlow {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.FeaturedHeroBanner {
+  background: #392176;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.BannerTag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #c4b5fd;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.FeaturedHeroBanner h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+.FeaturedHeroBanner p {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+.BannerMeta {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+}
+.StartBannerBtn {
+  background: #DDF579;
+  color: #111;
+  border: none;
+  font-weight: 700;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.StartBannerBtn:hover {
+  background: #fde047;
+}
+.BannerGraphic {
+  font-size: 5rem;
+  opacity: 0.9;
+}
+.LatestStepsSection {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+.SectionHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.SectionHeaderRow h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+}
+.ViewAllLink {
+  font-size: 0.85rem;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+.StepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.StepItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f9f8f6;
+  border-radius: 10px;
+  border: 1px solid #f3f4f6;
+}
+.StepCheckIcon {
+  width: 28px;
+  height: 28px;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.StepInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.StepInfo strong {
+  font-size: 0.9rem;
+  color: #111;
+}
+.StepInfo span {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+.StepScoreBadge {
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111;
+}
+.StepScoreBadge small {
+  font-size: 0.68rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+.RightColumnPath {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 1.75rem;
+  height: fit-content;
+}
+.PathHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.PathHeaderRow h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.PathSubHeader {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+.PathStepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.PathStepCard {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+}
+.PathStepCard.passed {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.PathStepCard.active {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+.PathStepCard.locked {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  opacity: 0.8;
+}
+.PathNumCircle {
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.passed .PathNumCircle {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+.active .PathNumCircle {
+  background: #ede9fe;
+  color: #6d28d9;
+  border-color: #ddd6fe;
+}
+.PathStepDetails {
+  flex: 1;
+}
+.PathTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+.PathTitleRow strong {
+  font-size: 0.9rem;
+  color: #111;
+}
+.PathStepDetails p {
+  font-size: 0.78rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+.PathStatus {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.PathStatus.passed {
+  background: #d1fae5;
+  color: #065f46;
+}
+.PathStatus.active {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.PathStatus.locked {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.PathFooterNote {
+  font-size: 0.75rem;
+  color: #6b7280;
+  line-height: 1.4;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 1rem;
+}

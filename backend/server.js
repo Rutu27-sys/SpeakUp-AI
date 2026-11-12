@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   hasCompletedAssessment: { type: Boolean, default: false },
-  currentLevel: { type: String, default: 'Level 0' }
+  currentLevel: { type: String, default: 'Level 0' },
+  score: { type: Number, default: 0 }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -48,7 +49,6 @@ const User = mongoose.model('User', userSchema);
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid email or password' });
 
@@ -57,7 +57,14 @@ app.post('/api/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-    res.status(200).json({ message: 'Logged in successfully', token, username: user.username, hasCompletedAssessment: user.hasCompletedAssessment, currentLevel: user.currentLevel});
+    res.status(200).json({ 
+      message: 'Logged in successfully', 
+      token, 
+      userId: user._id, 
+      username: user.username,
+      hasCompletedAssessment: user.hasCompletedAssessment,
+      currentLevel: user.currentLevel
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -77,6 +84,63 @@ app.post('/api/complete-assessment', async (req, res) => {
     }, { new: true });
 
     res.json({ message: "Assessment completed successfully", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/evaluate-assessment', async (req, res) => {
+  try {
+    const { userId, transcripts } = req.body;
+
+    const prompt = `
+      You are Toki, a warm, encouraging AI communication coach for "SpeakUp AI". 
+      A user has completed their initial 3-question speaking assessment. Here are their spoken transcripts:
+      - Question 1 (Introduction): "${transcripts[1] || 'No response'}"
+      - Question 2 (Directions): "${transcripts[2] || 'No response'}"
+      - Question 3 (Support): "${transcripts[3] || 'No response'}"
+
+      Evaluate their speech clarity, confidence, and structure. 
+      Provide your response strictly in the following JSON format without any extra markdown formatting or backticks:
+      {
+        "score": 75,
+        "assignedLevel": "Level 1",
+        "feedback": "A short, warm, encouraging paragraph from Toki summarizing their voice strengths and what to focus on next."
+      }
+    `;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: prompt,
+    });
+
+    const rawText = response.text;
+    const cleanedText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+    const evaluation = JSON.parse(cleanedText);
+
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      hasCompletedAssessment: true,
+      currentLevel: evaluation.assignedLevel || 'Level 1',
+      score: evaluation.score || 70
+    }, { new: true });
+
+    res.status(200).json({
+      message: 'Assessment evaluated successfully',
+      evaluation,
+      user: updatedUser
+    });
+
+  } catch (err) {
+    console.error('AI Evaluation Error:', err);
+    res.status(500).json({ error: 'Failed to evaluate assessment using AI. Please try again.' });
+  }
+});
+
+app.get('/api/user/:userId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
