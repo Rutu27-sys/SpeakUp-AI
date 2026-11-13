@@ -146,5 +146,273 @@ app.get('/api/user/:userId', async (req, res) => {
   }
 });
 
+// 1. Level-Based Scenario & Roleplay Engine
+// Shared Multi-Model Helper: Rotates across models with separate Free Tier quotas
+// Reliable Multi-Model Fallback using correct model identifiers
+async function callGeminiWithFallback(prompt) {
+  const models = [
+    'gemini-3.5-flash-lite',
+    'gemini-3.1-flash-lite',
+    'gemini-3.6-flash',
+    'gemini-3.8-flash'
+  ];
+
+  for (const model of models) {
+    try {
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+      });
+      const cleaned = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
+      return JSON.parse(cleaned);
+    } catch (err) {
+      console.warn(`[AI Fallback] ${model} failed (${err.status || err.message}), trying next...`);
+    }
+  }
+  if (process.env.GROQ_API_KEY) {
+    try {
+      const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' }
+        })
+      });
+      const groqData = await groqRes.json();
+      return JSON.parse(groqData.choices[0].message.content);
+    } catch (groqErr) {
+      console.warn('[Groq Fallback] failed:', groqErr.message);
+    }
+  }
+  throw new Error('All Gemini models exhausted.');
+}
+
+// Local Scenario Pool (used only if all Gemini quotas are exhausted)
+const LOCAL_SCENARIO_BANK = {
+  'Level 1': [
+    {
+      title: 'Wrong Order at a Busy Café',
+      category: 'Level 1 Roleplay',
+      description: 'You ordered an iced oat latte, but the barista handed you a hot black coffee. Politely explain the mistake and ask for the right drink.',
+      starter: 'Here is your hot black coffee! Have a great morning.'
+    },
+    {
+      title: 'Helping a Lost Tourist',
+      category: 'Level 1 Roleplay',
+      description: 'A visitor stops you near the metro station asking how to reach the main city library. Give clear, step-by-step directions.',
+      starter: 'Excuse me! I am a bit lost—could you tell me how to get to the central library from here?'
+    }
+  ],
+  'Level 2': [
+    {
+      title: 'Explaining a Missed Monday Exam',
+      category: 'Level 2 Roleplay',
+      description: 'You missed Monday’s important exam due to a sudden medical/family emergency. Speak to your professor and request a makeup test.',
+      starter: 'Come in. I noticed your seat was empty during Monday’s exam. What happened?'
+    },
+    {
+      title: 'Resolving a Group Project Delay',
+      category: 'Level 2 Roleplay',
+      description: 'Your teammate missed their deadline right before the presentation. Address the issue calmly and agree on a recovery plan.',
+      starter: 'Hey, I know the slides were due an hour ago—I got stuck on my section. Where do we stand?'
+    }
+  ],
+  'Level 3': [
+    {
+      title: 'Strict HR Interview: Late Arrival',
+      category: 'Level 3 Roleplay',
+      description: 'You are in a job interview and the HR manager is very strict about punctuality, but you arrived 10 minutes late. Apologize professionally and recover.',
+      starter: 'Why are you late? We scheduled this interview for sharp 10:00 AM, and punctuality matters here.'
+    },
+    {
+      title: 'Defending Your Technical Architecture',
+      category: 'Level 3 Roleplay',
+      description: 'A senior engineering interviewer questions why you chose your current tech stack for your portfolio project. Explain your reasoning clearly.',
+      starter: 'Walk me through your recent project—why did you choose that specific stack over simpler alternatives?'
+    }
+  ]
+};
+
+// 1. Level-Based Scenario Generator
+app.post('/api/generate-scenario', async (req, res) => {
+  const { level } = req.body;
+  const targetLevel = level || 'Level 1';
+
+  let difficultyGuide = '';
+  if (targetLevel === 'Level 1') {
+    difficultyGuide = 'Everyday casual situations (e.g., receiving the wrong coffee order, or helping a stranger with directions).';
+  } else if (targetLevel === 'Level 2') {
+    difficultyGuide = 'Academic or intermediate situations (e.g., explaining to a strict professor why you missed Monday’s exam and requesting a retest).';
+  } else {
+    difficultyGuide = 'High-stakes job interviews (e.g., a strict HR manager questioning why you arrived late, or asking you to introduce yourself and justify why you fit the role).';
+  }
+
+  const prompt = `
+    You are Toki, an AI communication coach creating an unscripted roleplay exercise.
+    Target Level: ${targetLevel}
+    Guideline: ${difficultyGuide}
+
+    Generate a fresh, realistic scenario. Return strictly JSON without markdown:
+    {
+      "title": "Short title",
+      "category": "${targetLevel} Roleplay",
+      "description": "Clear 1-2 sentence situation context for the user",
+      "starter": "Toki's very first in-character opening question or statement"
+    }
+  `;
+
+  try {
+    const scenario = await callGeminiWithFallback(prompt);
+    res.status(200).json(scenario);
+  } catch (err) {
+    const pool = LOCAL_SCENARIO_BANK[targetLevel] || LOCAL_SCENARIO_BANK['Level 1'];
+    const randomPick = pool[Math.floor(Math.random() * pool.length)];
+    res.status(200).json(randomPick);
+  }
+});
+
+// 2. Natural 2-Way In-Character Roleplay Chat
+app.post('/api/chat', async (req, res) => {
+  const { scenarioDescription, message, history } = req.body;
+
+  const conversationHistory = (history || [])
+    .map((m) => `${m.sender === 'user' ? 'User' : 'Toki'}: ${m.text}`)
+    .join('\n');
+
+  const prompt = `
+    You are playing a realistic human character in an English speaking roleplay.
+    Scenario Context: "${scenarioDescription}"
+
+    Conversation so far:
+    ${conversationHistory}
+    User: "${message}"
+
+    Rules:
+    - Stay 100% in character (e.g., strict HR manager, professor, barista, or interviewer).
+    - React directly to the user's actual words—challenge vague excuses or ask a natural follow-up question like a real person would.
+    - Keep your response natural and concise (1-3 sentences).
+
+    Return strictly JSON without markdown:
+    {
+      "reply": "Your in-character response",
+      "tip": "Optional 1-line speaking tip (or null)"
+    }
+  `;
+
+  try {
+    const parsed = await callGeminiWithFallback(prompt);
+    res.status(200).json(parsed);
+  } catch (err) {
+    // Context-aware local fallback if all API quotas are exhausted
+    const userWords = message.trim().split(/\s+/).length;
+    const reply =
+      userWords < 6
+        ? "That's quite brief—can you explain that in a bit more detail? I want to hear your full reasoning."
+        : "I hear what you're saying, though how would you ensure this doesn't become a recurring issue going forward?";
+    res.status(200).json({
+      reply,
+      tip: 'Aim for 2–3 complete sentences with clear reasoning.'
+    });
+  }
+});
+
+// 3. Strict End-of-Session Evaluation & Scorecard
+app.post('/api/end-session-feedback', async (req, res) => {
+  try {
+    const { userId, scenarioTitle, scenarioDescription, history } = req.body;
+    const userTurns = (history || []).filter((m) => m.sender === 'user');
+    const allUserText = userTurns.map((t) => t.text).join(' ').trim();
+    const totalWords = allUserText ? allUserText.split(/\s+/).length : 0;
+
+    const transcriptLog = (history || [])
+      .map((m) => `${m.sender === 'user' ? 'User' : 'Toki'}: ${m.text}`)
+      .join('\n');
+
+    const prompt = `
+      You are a strict English communication evaluator for "SpeakUp AI".
+      Scenario: "${scenarioTitle}" (${scenarioDescription})
+      Transcript:
+      ${transcriptLog}
+
+      Strict Grading Rubric (Pass mark = 70):
+      - If the user gave short, incomplete, or low-effort answers (fewer than 20 total words or only 1–2 turns), score MUST be between 35 and 62 (failed).
+      - Check grammar, politeness, clarity, and whether they properly solved the scenario.
+      - Explain the exact reason for the score and what to fix.
+
+      Return strictly JSON without markdown:
+      {
+        "score": <number 35-95>,
+        "passed": <boolean true if score >= 70 else false>,
+        "speechClarity": "<Specific critique of sentence structure, grammar, and clarity>",
+        "strength": "<What worked well, or note lack of detail>",
+        "improvement": "<Exact reason marks were deducted and what to improve>",
+        "summary": "<Direct, honest closing verdict>"
+      }
+    `;
+
+    let feedbackData;
+    try {
+      feedbackData = await callGeminiWithFallback(prompt);
+    } catch (err) {
+      // Strict heuristic fallback so short/lazy test inputs NEVER get an inflated 93
+      const avgWordsPerTurn = userTurns.length > 0 ? totalWords / userTurns.length : 0;
+      let score = 40;
+      if (userTurns.length >= 3) score += 18;
+      else if (userTurns.length === 2) score += 10;
+
+      if (avgWordsPerTurn >= 12) score += 22;
+      else if (avgWordsPerTurn >= 7) score += 12;
+      else score += 3;
+
+      if (/\b(please|sorry|apologize|thank|because|ensure|experience|project)\b/i.test(allUserText)) {
+        score += 8;
+      }
+      score = Math.max(35, Math.min(92, score));
+      const passed = score >= 70;
+
+      feedbackData = {
+        score,
+        passed,
+        speechClarity:
+          avgWordsPerTurn < 8
+            ? `Your responses averaged only ${Math.round(avgWordsPerTurn)} words per turn, which felt too abrupt for this scenario.`
+            : `Clear sentence flow across ${userTurns.length} turns (${totalWords} total words).`,
+        strength:
+          userTurns.length >= 2
+            ? 'You stayed engaged with the prompts and responded directly.'
+            : 'You initiated the roleplay response.',
+        improvement: passed
+          ? 'Add a concrete example or proactive next step to push your score above 85.'
+          : 'Marks were deducted because your answers were too short and lacked a complete explanation or polite framing.',
+        summary: passed
+          ? 'Congrats! You passed this scenario and demonstrated solid conversational control.'
+          : 'Not quite there yet—expand your answers into 2–3 full sentences and try again.'
+      };
+    }
+
+    let updatedUser = null;
+    if (userId) {
+      updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          score: feedbackData.score,
+          currentLevel: feedbackData.passed ? 'Level 2' : 'Level 1'
+        },
+        { returnDocument: 'after' }
+      );
+    }
+
+    res.status(200).json({ ...feedbackData, user: updatedUser });
+  } catch (err) {
+    console.error('Feedback Error:', err);
+    res.status(500).json({ error: 'Could not generate feedback.' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
