@@ -11,11 +11,9 @@ function App() {
 
   const [currentView,setCurrentView] = useState('landing') ;
   const [user, setUser] = useState(null);
-
   const handleLoginSuccess = (userData) => {
     setUser(userData); 
   };
-
   if (user) {
     if (!user.hasCompletedAssessment) {
       return (
@@ -28,10 +26,10 @@ function App() {
     return <Dashboard onLogout={() => setUser(null)} user={user} />;
   }
   if (currentView === 'login') {
-    return <Login onLoginSuccess={handleLoginSuccess} onBack={() => setCurrentView('landing')} />;
+    return <Login onLoginSuccess={handleLoginSuccess} onBack={() => setCurrentView('landing')} onSwitchToSignup={() => setCurrentView('signup')}/>;
   }
   if (currentView === 'signup') {
-    return <SignUp onSignupSuccess={() => setCurrentView('login')} onBack={() => setCurrentView('landing')} />;
+    return <SignUp onSignupSuccess={() => setCurrentView('login')} onBack={() => setCurrentView('landing')} onSwitchToLogin={() => setCurrentView('login')} />;
   }
 
   return (

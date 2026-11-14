@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import './Auth.css'
 
-const Login = ({onBack, onLoginSuccess}) => {
+const Login = ({onBack, onLoginSuccess, onSwitchToSignup}) => {
    const [formData, setFormData] = useState({
       email: '',
       password: '',
     });
-  
     const [showPassword, setShowPassword] = useState(false);
-  
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({
@@ -16,7 +14,6 @@ const Login = ({onBack, onLoginSuccess}) => {
         [name]: value,
       }));
     };
-  
    const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -59,8 +56,6 @@ const Login = ({onBack, onLoginSuccess}) => {
          <div className="YellowAuthText">YOUR LEARNING STUDIO</div>
          <div className="BlackAuthText">Ready for another try?</div>
          <div className="GreyAuthText" style={{ textAlign: 'left' }}>Log in to continue your personalized learning path.</div>
-         <button className='GoogleAuth'>Continue with Google</button>
-         <div className="LineBreak">or with email</div>
 
         <form onSubmit={handleSubmit}>
 
@@ -80,9 +75,7 @@ const Login = ({onBack, onLoginSuccess}) => {
            <button type="submit" className="CreateAcc" >Log in to my studio</button>
            
         </form>
-
-        
-        <a className="GreyAuthText" id='AlreadyAcc' href="#login">New to SpeakUp AI?  Create an account</a>
+        <a className="GreyAuthText" id='AlreadyAcc' href="#signup"  onClick={(e) => {e.preventDefault(); onSwitchToSignup(); }} >New to SpeakUp AI?  Create an account</a>
       </div>
 
     </div>

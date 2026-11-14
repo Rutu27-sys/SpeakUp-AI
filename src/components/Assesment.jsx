@@ -14,11 +14,9 @@ const Assessment = ({ user, onAssessmentComplete }) => {
       const recog = new SpeechRecognition();
       recog.continuous = true;
       recog.interimResults = true;
-
       recog.onresult = (event) => {
         let interim = '';
         let final = '';
-
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
             final += event.results[i][0].transcript + ' ';
@@ -33,16 +31,13 @@ const Assessment = ({ user, onAssessmentComplete }) => {
           }));
         }
       };
-
       recog.onerror = (event) => {
         console.error('Speech recognition error', event.error);
         setIsRecording(false);
       };
-
       recog.onend = () => {
         setIsRecording(false);
       };
-
       setRecognition(recog);
     }
   }, [currentQuestion]);
@@ -77,13 +72,11 @@ const Assessment = ({ user, onAssessmentComplete }) => {
   };
 
   const currentTranscript = transcripts[currentQuestion];
-
   const getQuestionPrompt = () => {
     if (currentQuestion === 1) return '“Hi! Tell me a little about yourself and something you enjoy doing.”';
     if (currentQuestion === 2) return '“Considering we are strangers. Can you ask directions for nearest metro station ?”';
     return '“Tell me about a time you needed help with a difficult task and how you asked for it.”';
   };
-
   const handleFinishAssessment = async () => {
   try {
     const userId = user?.userId || user?._id || user?.id || localStorage.getItem('userId');
@@ -92,20 +85,17 @@ const Assessment = ({ user, onAssessmentComplete }) => {
       alert('User ID missing. Please log in again.');
       return;
     }
-
     const response = await fetch('http://localhost:5000/api/evaluate-assessment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, transcripts })
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error response:', errorText);
       alert(`Server error (${response.status}): Could not evaluate assessment.`);
       return;
     }
-
     const data = await response.json();
     alert(`Toki says: ${data.evaluation.feedback}`);
     onAssessmentComplete();

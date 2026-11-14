@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import './Auth.css'
 
-const SignUp = ({onBack, onSignupSuccess}) => {
+const SignUp = ({onBack, onSignupSuccess , onSwitchToLogin}) => {
 
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
-
   const [showPassword, setShowPassword] = useState(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -18,7 +16,6 @@ const SignUp = ({onBack, onSignupSuccess}) => {
       [name]: value,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -38,7 +35,7 @@ const SignUp = ({onBack, onSignupSuccess}) => {
       console.error('Signup error:', err);
     }
   };
-
+  
   return (
     <div className='SignUpAuth'>
 
@@ -60,8 +57,6 @@ const SignUp = ({onBack, onSignupSuccess}) => {
          <div className="YellowAuthText">YOUR FIRST SMALL STEP</div>
          <div className="BlackAuthText">Let’s find your voice.</div>
          <div className="GreyAuthText" style={{ textAlign: 'left' }}>Create an account, then take a short assessment to get your personalized learning plan.</div>
-         <button className='GoogleAuth'>Continue with Google</button>
-         <div className="LineBreak">or with email</div>
 
         <form onSubmit={handleSubmit}>
 
@@ -88,7 +83,7 @@ const SignUp = ({onBack, onSignupSuccess}) => {
         </form>
 
         
-        <a className="GreyAuthText" id='AlreadyAcc' href="#login">Already have an account?  Log in</a>
+        <a className="GreyAuthText" id='AlreadyAcc' href="#login" onClick={(e) => {e.preventDefault(); onSwitchToLogin();}}>Already have an account?  Log in</a>
       </div>
     </div>
   )

@@ -2,43 +2,16 @@ import React, { useState, useEffect } from 'react';
 import ChatStudio from './ChatStudio';
 import './Dashboard.css';
 
-const SCENARIOS = [
-  {
-    id: 'project',
-    category: 'Portfolio & Tech',
-    title: 'Talking about your recent project',
-    focusTitle: 'Share what you built & what you learned.',
-    focusDesc: 'Discuss your tech stack, animations, or architecture naturally as if speaking to a peer.',
-    starter: "Hey! How is the project you were working on going?"
-  },
-  {
-    id: 'interview',
-    category: 'Job Interview',
-    title: 'Introduce yourself',
-    focusTitle: 'One point. One real example.',
-    focusDesc: 'Lead with your main contribution and back it up with details.',
-    starter: "Hi! Thanks for jumping on. Can you share a quick introduction and walk me through a challenge you solved recently?"
-  },
-  {
-    id: 'coffee',
-    category: 'Everyday Confidence',
-    title: 'Ordering at a busy café',
-    focusTitle: 'Clear request. Calm pace.',
-    focusDesc: 'State your order clearly without rushing.',
-    starter: "Hi there! Welcome in. What can I get started for you today?"
-  }
-];
-
 const Dashboard = ({ user, onLogout }) => {
   const [profile, setProfile] = useState(user || null);
   const [activeNav, setActiveNav] = useState('learning'); 
   const [selectedScenario, setSelectedScenario] = useState(null);
+  const [selectedHistoryItem, setSelectedHistoryItem] = useState(null); 
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       const userId = user?.userId || user?._id || localStorage.getItem('userId');
       if (!userId) return;
-
       try {
         const res = await fetch(`http://localhost:5000/api/user/${userId}`);
         if (res.ok) {
@@ -49,7 +22,6 @@ const Dashboard = ({ user, onLogout }) => {
         console.error('Failed to load profile:', err);
       }
     };
-
     fetchUserProfile();
   }, [user]);
 
@@ -59,6 +31,7 @@ const Dashboard = ({ user, onLogout }) => {
   };
 
   const initials = profile?.username ? profile.username.substring(0, 2).toUpperCase() : 'SU';
+  const historyList = profile?.completedScenarios || [];
 
   return (
     <div className="AppLayout">
@@ -71,24 +44,9 @@ const Dashboard = ({ user, onLogout }) => {
 
           <div className="SidebarNavGroup">
             <div className="SidebarGroupTitle">YOUR LEARNING STUDIO</div>
-            <button
-              className={`SidebarNavItem ${activeNav === 'learning' ? 'active' : ''}`}
-              onClick={() => setActiveNav('learning')}
-            >
-              ⊞ My learning
-            </button>
-            <button
-              className={`SidebarNavItem ${activeNav === 'scenarios' ? 'active' : ''}`}
-              onClick={() => handleOpenScenario(null)}
-            >
-              🧭 Role scenarios
-            </button>
-            <button
-              className={`SidebarNavItem ${activeNav === 'growth' ? 'active' : ''}`}
-              onClick={() => setActiveNav('growth')}
-            >
-              📈 My growth
-            </button>
+            <button className={`SidebarNavItem ${activeNav === 'learning' ? 'active' : ''}`} onClick={() => setActiveNav('learning')} > ⊞ My learning </button>
+            <button className={`SidebarNavItem ${activeNav === 'scenarios' ? 'active' : ''}`} onClick={() => handleOpenScenario(null)} > 🧭 Role scenarios </button>
+            <button className={`SidebarNavItem ${activeNav === 'growth' ? 'active' : ''}`} onClick={() => setActiveNav('growth')}> 📈 My growth </button>
           </div>
 
           <div className="TokiSidebarCard">
@@ -102,8 +60,6 @@ const Dashboard = ({ user, onLogout }) => {
         </div>
 
         <div className="SidebarFooterGroup">
-          <button className="SidebarFooterItem">❓ Help & feedback</button>
-          <button className="SidebarFooterItem">⚙️ Settings</button>
 
           <div className="SidebarUserProfile" onClick={onLogout} title="Click to log out">
             <div className="UserAvatarBubble">{initials}</div>
@@ -114,68 +70,100 @@ const Dashboard = ({ user, onLogout }) => {
           </div>
         </div>
       </aside>
+
       <main className="AppMainContent">
         {activeNav === 'scenarios' ? (
-          <ChatStudio
-            user={profile}
-            initialScenario={selectedScenario}
-            onBackToLearning={() => setActiveNav('learning')}
-          />
-        ) : activeNav === 'growth' ? (
+        <ChatStudio
+               user={profile}
+               onUserUpdate={(updated) => setProfile(updated)}
+               onBackToLearning={() => setActiveNav('learning')}
+               onViewGrowth={() => setActiveNav('growth')} />  ) : activeNav === 'growth' ? (
           <div className="GrowthPageContainer">
             <div className="GrowthHeader">
               <h2>Your Speaking Growth Over Time</h2>
-              <p>Tracking your clarity score, session frequency, and level progressions.</p>
+              <p>Review your clarity scores, session history, and detailed feedback from past practices.</p>
             </div>
 
             <div className="GrowthMetricsGrid">
               <div className="MetricCard">
                 <span className="MetricLabel">Current Clarity Score</span>
                 <div className="MetricValue">{profile?.score ?? 78}<span> /100</span></div>
-                <span className="MetricDetail unlocked">📈 +12 pts since baseline</span>
+                <span className="MetricDetail unlocked">📈 Active evaluation score</span>
               </div>
               <div className="MetricCard">
                 <span className="MetricLabel">Completed Sessions</span>
-                <div className="MetricValue">5</div>
-                <span className="MetricDetail">Across role scenarios</span>
+                <div className="MetricValue">{historyList.length}</div>
+                <span className="MetricDetail">Total roleplay attempts</span>
               </div>
               <div className="MetricCard">
                 <span className="MetricLabel">Current Milestone</span>
-                <div className="MetricValue">{profile?.currentLevel || 'Level 1'}</div>
-                <span className="MetricDetail unlocked">Active practice tier</span>
+                <div className="MetricValue">Level {profile?.currentLevel ?? 0}</div>
+                <span className="MetricDetail unlocked">Progress: {profile?.levelPasses ?? 0}/3 passed</span>
               </div>
             </div>
 
             <div className="GrowthHistoryCard">
-              <h3>Recent Practice Sessions</h3>
-              <div className="StepsList" style={{ marginTop: '1rem' }}>
-                <div className="StepItem">
-                  <div className="StepCheckIcon">✓</div>
-                  <div className="StepInfo">
-                    <strong>Talking about your recent project</strong>
-                    <span>Today • Role scenario</span>
-                  </div>
-                  <div className="StepScoreBadge">{profile?.score ?? 82}/100<br/><small>Passed</small></div>
+              <h3>All Practice Sessions & Results</h3>
+              {historyList.length === 0 ? (
+                <p style={{ color: '#6b7280', fontSize: '0.9rem', marginTop: '1rem' }}>
+                  No practice sessions recorded yet. Head over to <strong>Role scenarios</strong> to complete your first session!
+                </p>  ) : (
+                <div className="StepsList" style={{ marginTop: '1rem' }}>
+                  {historyList.reverse().map((item, idx) => (
+                    <div key={idx} className="StepItem" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div className="StepCheckIcon" style={{ background: item.passed ? '#dcfce7' : '#fee2e2', color: item.passed ? '#15803d' : '#dc2626' }}>
+                          {item.passed ? '✓' : '✕'}
+                        </div>
+                        <div className="StepInfo">
+                          <strong>{item.title}</strong>
+                          <span>Level {item.level} • {new Date(item.date).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                        <div className="StepScoreBadge">
+                          {item.score}/100<br />
+                          <small style={{ color: item.passed ? '#15803d' : '#dc2626' }}>
+                            {item.passed ? 'Passed' : 'Failed'}
+                          </small>
+                        </div>
+                        <button className="SecondaryOutlineBtn" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}onClick={() => setSelectedHistoryItem(item)} > View feedback </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="StepItem">
-                  <div className="StepCheckIcon">✓</div>
-                  <div className="StepInfo">
-                    <strong>Introduce yourself</strong>
-                    <span>Nov 3 • Level 1 Check</span>
+              )}
+            </div>
+
+            {selectedHistoryItem && (
+              <div className="ModalOverlay" onClick={() => setSelectedHistoryItem(null)}>
+                <div className="ModalContent" onClick={(e) => e.stopPropagation()}>
+                  <div className="FeedbackHeaderBadge">SESSION FEEDBACK REVIEW</div>
+                  <h3>{selectedHistoryItem.title}</h3>
+                  <div className="ScoreBigNum" style={{ fontSize: '1.75rem', margin: '0.5rem 0' }}>
+                    {selectedHistoryItem.score}<span>/100</span>
+                    <span style={{ fontSize: '0.85rem', marginLeft: '0.75rem', color: selectedHistoryItem.passed ? '#15803d' : '#dc2626' }}>
+                      ({selectedHistoryItem.passed ? 'Passed' : 'Failed'})
+                    </span>
                   </div>
-                  <div className="StepScoreBadge">78/100<br/><small>Passed</small></div>
+                  <p style={{ marginTop: '0.75rem' }}><strong>🗣️ Clarity & Grammar:</strong> {selectedHistoryItem.speechClarity || 'Recorded during session evaluation.'}</p>
+                  <p style={{ marginTop: '0.5rem' }}><strong>🤝 Politeness & Tone:</strong> {selectedHistoryItem.politenessAndTone || 'Maintained conversational flow.'}</p>
+                  <p style={{ marginTop: '0.5rem' }}><strong>🎯 Improvement Advice:</strong> {selectedHistoryItem.improvement || 'Keep practicing full sentences.'}</p>
+                  <div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
+                    <button className="PrimaryPurpleBtn" onClick={() => setSelectedHistoryItem(null)}>
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
+            )}
+          </div> ) : (
           <>
             <header className="MainTopBar">
               <div className="Breadcrumb">My learning / Your studio</div>
               <div className="TopBarRight">
                 <div className="StreakPill">⚡ 2-day practice streak</div>
-                <button className="BellBtn">🔔</button>
-                <div className="StatusGreenDot"></div>
               </div>
             </header>
 
@@ -187,18 +175,18 @@ const Dashboard = ({ user, onLogout }) => {
               <div className="MetricsRow">
                 <div className="MetricCard level-tint">
                   <span className="MetricLabel">Current level</span>
-                  <div className="MetricValue">{profile?.currentLevel || 'Level 1'}</div>
-                  <span className="MetricDetail unlocked">Unlocked • Build a clear response</span>
+                  <div className="MetricValue">Level {profile?.currentLevel ?? 0}</div>
+                  <span className="MetricDetail unlocked">Progress: {profile?.levelPasses ?? 0}/3 passes</span>
                 </div>
                 <div className="MetricCard">
-                  <span className="MetricLabel">Latest level check</span>
+                  <span className="MetricLabel">Latest clarity score</span>
                   <div className="MetricValue">{profile?.score ?? 78} / 100</div>
-                  <span className="MetricDetail">Level 0 passed • 70 required</span>
+                  <span className="MetricDetail">Evaluated performance</span>
                 </div>
                 <div className="MetricCard">
-                  <span className="MetricLabel">Practice time</span>
-                  <div className="MetricValue">24 min</div>
-                  <span className="MetricDetail">4 sessions • 2-day streak</span>
+                  <span className="MetricLabel">Practice sessions</span>
+                  <div className="MetricValue">{historyList.length} completed</div>
+                  <span className="MetricDetail">Endless course active</span>
                 </div>
               </div>
 
@@ -206,17 +194,14 @@ const Dashboard = ({ user, onLogout }) => {
                 <div className="LeftColumnFlow">
                   <div className="FeaturedHeroBanner">
                     <div className="BannerTextContent">
-                      <span className="BannerTag">YOUR NEXT SMALL STEP • {profile?.currentLevel || 'LEVEL 1'}</span>
-                      <h2>Tell your story, one point at a time.</h2>
-                      <p>Practice talking about your recent projects and tech stack with Toki.</p>
+                      <span className="BannerTag">YOUR NEXT SMALL STEP • LEVEL {profile?.currentLevel ?? 0}</span>
+                      <h2>Build clear and confident English.</h2>
+                      <p>Practice unscripted roleplay scenarios with Toki tailored to your active level.</p>
                       <div className="BannerMeta">
                         <span>3 min</span> • <span>Interactive chat</span>
                       </div>
-                      <button
-                        className="StartBannerBtn"
-                        onClick={() => handleOpenScenario(SCENARIOS[0])}
-                      >
-                        Start "Talking about your project" →
+                      <button className="StartBannerBtn" onClick={() => handleOpenScenario(null)}>
+                        Start Role Scenario →
                       </button>
                     </div>
                     <div className="BannerGraphic">🍇</div>
@@ -225,29 +210,29 @@ const Dashboard = ({ user, onLogout }) => {
                   <div className="LatestStepsSection">
                     <div className="SectionHeaderRow">
                       <h3>Your latest steps</h3>
-                      <span className="ViewAllLink" onClick={() => handleOpenScenario(null)}>
-                        Practice scenarios ↗
+                      <span className="ViewAllLink" onClick={() => setActiveNav('growth')}>
+                        View all growth ↗
                       </span>
                     </div>
 
                     <div className="StepsList">
-                      <div className="StepItem">
-                        <div className="StepCheckIcon">✓</div>
-                        <div className="StepInfo">
-                          <strong>Level 0 check</strong>
-                          <span>Nov 2 • Level check</span>
-                        </div>
-                        <div className="StepScoreBadge">{profile?.score ?? 78}/100<br /><small>Passed</small></div>
-                      </div>
-
-                      <div className="StepItem">
-                        <div className="StepCheckIcon">✓</div>
-                        <div className="StepInfo">
-                          <strong>Ordering at a café</strong>
-                          <span>Nov 2 • Practice</span>
-                        </div>
-                        <div className="StepScoreBadge">74/100<br /><small>Completed</small></div>
-                      </div>
+                      {historyList.length === 0 ? (
+                        <div style={{ padding: '1rem', color: '#6b7280', fontSize: '0.88rem' }}>
+                          No sessions yet. Click "Role scenarios" to begin!
+                        </div> ) : (
+                        historyList.slice(-3).reverse().map((item, idx) => (
+                          <div key={idx} className="StepItem">
+                            <div className="StepCheckIcon" style={{ background: item.passed ? '#dcfce7' : '#fee2e2', color: item.passed ? '#15803d' : '#dc2626' }}>
+                              {item.passed ? '✓' : '✕'}
+                            </div>
+                            <div className="StepInfo">
+                              <strong>{item.title}</strong>
+                              <span>Level {item.level} • {new Date(item.date).toLocaleDateString()}</span>
+                            </div>
+                            <div className="StepScoreBadge">{item.score}/100<br /><small>{item.passed ? 'Passed' : 'Failed'}</small></div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
@@ -257,18 +242,18 @@ const Dashboard = ({ user, onLogout }) => {
                     <h3>Your learning path</h3>
                     <span className="PathIcon">⇄</span>
                   </div>
-                  <p className="PathSubHeader">Every level is a new set of real-life possibilities.</p>
+                  <p className="PathSubHeader">Pass 3 scenarios per level to unlock higher tiers.</p>
 
                   <div className="PathStepsList">
                     <div className="PathStepCard passed">
                       <div className="PathNumCircle">0</div>
                       <div className="PathStepDetails">
                         <div className="PathTitleRow">
-                          <strong>Find your footing</strong>
+                          <strong>Foundational Clarity</strong>
                           <span className="CheckMark">✓</span>
                         </div>
-                        <p>Introductions & everyday asks</p>
-                        <span className="PathStatus passed">Passed - {profile?.score ?? 78}/100</span>
+                        <p>Everyday interactions & asks</p>
+                        <span className="PathStatus passed">Active / Passed</span>
                       </div>
                     </div>
 
@@ -276,11 +261,11 @@ const Dashboard = ({ user, onLogout }) => {
                       <div className="PathNumCircle">1</div>
                       <div className="PathStepDetails">
                         <div className="PathTitleRow">
-                          <strong>Build a clear response</strong>
+                          <strong>Social & Institutional</strong>
                           <span className="PlayIcon">▷</span>
                         </div>
-                        <p>Structure, examples & response flow</p>
-                        <span className="PathStatus active">Unlocked - Active</span>
+                        <p>Campus & formal requests</p>
+                        <span className="PathStatus active">Current Tier</span>
                       </div>
                     </div>
 
@@ -288,11 +273,11 @@ const Dashboard = ({ user, onLogout }) => {
                       <div className="PathNumCircle">2</div>
                       <div className="PathStepDetails">
                         <div className="PathTitleRow">
-                          <strong>Navigate tricky moments</strong>
+                          <strong>Job Interviews & Career</strong>
                           <span className="LockIcon">🔒</span>
                         </div>
-                        <p>Workplace & learning conversations</p>
-                        <span className="PathStatus locked">Locked - Pass Level 1 with 70+</span>
+                        <p>Behavioral & professional Q&A</p>
+                        <span className="PathStatus locked">Locked</span>
                       </div>
                     </div>
                   </div>
