@@ -26,7 +26,7 @@ Practicing spoken English alone is intimidating, and generic AI chatbots (like a
 # Local Setup Instructions
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/your-username/speakup-ai.git](https://github.com/your-username/speakup-ai.git)
+   git clone https://github.com/Rutu27-sys/SpeakUp-AI.git
    cd speakup-ai
 
 2. **Backend Setup:**
