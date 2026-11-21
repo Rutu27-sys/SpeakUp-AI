@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ChatStudio from './ChatStudio';
 import './Dashboard.css';
+import Toki from '../Images/TOKI.png'
+import TOKIWINK from '../Images/TOKIWINK.png'
 
 const Dashboard = ({ user, onLogout }) => {
   const [profile, setProfile] = useState(user || null);
@@ -38,7 +40,7 @@ const Dashboard = ({ user, onLogout }) => {
       <aside className="AppSidebar">
         <div>
           <div className="SidebarLogoArea">
-            <span className="SidebarLogoBadge">💬</span>
+            <span className="SidebarLogoBadge"></span>
             <span className="SidebarLogoText">SpeakUp AI</span>
           </div>
 
@@ -50,7 +52,7 @@ const Dashboard = ({ user, onLogout }) => {
           </div>
 
           <div className="TokiSidebarCard">
-            <div className="TokiCardAvatar">🍇</div>
+            <div className="TokiCardAvatar"><img src={Toki} className='TokiImg'/> </div>
             <div className="TokiCardContent">
               <strong>A little practice.<br />A louder you.</strong>
               <p>Your next small step is a big deal. I'm here for it.</p>
@@ -204,7 +206,7 @@ const Dashboard = ({ user, onLogout }) => {
                         Start Role Scenario →
                       </button>
                     </div>
-                    <div className="BannerGraphic">🍇</div>
+                    <div className="BannerGraphic"><img src={TOKIWINK} className='TokiImg'/> </div>
                   </div>
 
                   <div className="LatestStepsSection">

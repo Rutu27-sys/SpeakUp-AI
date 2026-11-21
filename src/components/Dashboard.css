@@ -74,6 +74,10 @@
 .TokiCardAvatar {
   font-size: 1.5rem;
 }
+.TokiImg{
+    width: 180px;
+    height: 180px;
+}
 .TokiSidebarCard strong {
   font-size: 0.9rem;
   color: #111;

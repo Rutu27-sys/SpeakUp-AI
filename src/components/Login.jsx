@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Auth.css'
+import Toki from '../Images/TOKI.png'
 
 const Login = ({onBack, onLoginSuccess, onSwitchToSignup}) => {
    const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ const Login = ({onBack, onLoginSuccess, onSwitchToSignup}) => {
         <div className="SecondHead">Welcome back.<br></br>Your next step is waiting.</div>
         <div className="ThirdHead">No catching up. No pressure. Pick up right where you left off—with your biggest little supporter.</div>
         <div className="TokiAuthCard">
-            <div className="TokiAuthImg"></div>
+            <div className='TokiAuthImg'> <img className='TokiImg' src={Toki} /> </div>
             <div className="YellowAuthText">“You showed up for your voice today. That’s already a good start.”</div>
         </div>
         <div className="LastHead">Practice at your pace. Your voice, your journey.</div>

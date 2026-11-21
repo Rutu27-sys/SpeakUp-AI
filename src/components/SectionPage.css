@@ -107,6 +107,8 @@
     background-color: #EDE6FF;
     border-radius: 20px;
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
     text-align: left;
     row-gap: 15px;
@@ -151,6 +153,9 @@
     border-radius: 8px;
     width: 60%;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .Q{
     background-color: #FFFFFF;

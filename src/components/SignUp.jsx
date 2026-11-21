@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Auth.css'
+import TOKIWINK from '../Images/TOKIWINK.png'
+
 
 const SignUp = ({onBack, onSignupSuccess , onSwitchToLogin}) => {
 
@@ -45,7 +47,7 @@ const SignUp = ({onBack, onSignupSuccess , onSwitchToLogin}) => {
         <div className="SecondHead">Start small.<br></br>Speak a little bigger.</div>
         <div className="ThirdHead">A safe place to practice the conversations that matter, with Toki by your side.</div>
         <div className="TokiAuthCard">
-            <div className="TokiAuthImg"></div>
+            <div className="TokiAuthImg"> <img className='TokiImg' src={TOKIWINK} /> </div>
             <div className="YellowAuthText">“You don’t have to know what to say yet. We’ll figure it out together.”</div>
         </div>
         <div className="LastHead">Practice at your pace. Your voice, your journey.</div>

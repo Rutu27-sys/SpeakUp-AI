@@ -117,6 +117,15 @@ form label{
     height: 30px;
     margin-top: 5px;
 }
+.TokiImg{
+    width: 230px;
+    height: 230px;
+}
+.TokiAuthImg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 @media screen and (max-width: 1024px) {
     .SignUpAuth {
         grid-template-columns: 1fr; 

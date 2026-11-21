@@ -106,13 +106,20 @@
 .TokiPlaceholder {
     width: 180px;
     height: 180px;
-    border-radius: 50%;
-    background-color: #7046E8;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
     font-family: 'Syne-Regular', sans-serif;
+}
+.TokiImg{
+    width: 230px;
+    height: 230px;
+}
+.TokiCardImg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .Label {
     width: 100%;

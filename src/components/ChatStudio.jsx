@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Dashboard.css';
+import Toki from '../Images/TOKI.png'
 
 const ChatStudio = ({ user, onUserUpdate, onBackToLearning, onViewGrowth }) => {
   const unlockedLevel = user?.currentLevel ?? 0;
@@ -229,7 +230,7 @@ const ChatStudio = ({ user, onUserUpdate, onBackToLearning, onViewGrowth }) => {
           <div className="CenterChatScrollArea" style={{ maxHeight: '430px' }}>
             {isGenerating ? (
               <div className="ChatWelcomeHero">
-                <div className="GlowingOrb"></div>
+                <div >  <img src={Toki}className='TokiImg' /></div>
                 <div className="WelcomeHello">Toki is creating a random Level {activeLevel} scenario...</div>
                 <p className="WelcomeStarterQuote">Every session adapts to your speaking level.</p>
               </div>

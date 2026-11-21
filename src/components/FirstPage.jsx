@@ -1,6 +1,8 @@
 import React from 'react'
 import './FirstPage.css'
 import './SectionPage.css'
+import Toki from '../Images/TOKI.png'
+import TOKIWINK from '../Images/TOKIWINK.png'
 
 const FirstPage = () => {
   return (
@@ -24,7 +26,7 @@ const FirstPage = () => {
 
          <div className="TokiArea">
             <div className="TokiPlaceholder">
-              Toki
+              <img src={Toki} alt="Toki" id='TOKIIMG' className='TokiImg'/> 
             </div>
           </div>
 
@@ -131,7 +133,8 @@ const FirstPage = () => {
   <section className='SixthDiv' id='MeetToki'>
       <div className="SixthWrapper">
         <div className="TokiCard">
-          <div className="TokiImg"></div>
+          <div className='TokiCardImg'> <img src={TOKIWINK} alt='TOKIWINK' className='TokiImg' />
+          </div>
           <div className="TokiTalk">“Take your time. I’m all ears.”</div>
         </div>
         <div className="OtherCard">
