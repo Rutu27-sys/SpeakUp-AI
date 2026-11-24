@@ -78,14 +78,36 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/complete-assessment', async (req, res) => {
   try {
     const { userId, calculatedScore } = req.body;
-    let assignedLevel = 'Level 0';
-    if (calculatedScore >= 70) assignedLevel = 'Level 2';
-    else if (calculatedScore >= 50) assignedLevel = 'Level 1';
-    const updatedUser = await User.findByIdAndUpdate(userId, {
-      hasCompletedAssessment: true,
-      currentLevel: assignedLevel
-    }, { new: true });
-    res.json({ message: "Assessment completed successfully", user: updatedUser });
+    const score = Number(calculatedScore);
+    if (!userId || !Number.isFinite(score) || score < 0 || score > 100) {
+      return res.status(400).json({
+        error: 'Valid user ID and score are required.'
+      });
+    }
+    let assignedLevel = 0;
+    if (score >= 70) {
+      assignedLevel = 2;
+    } else if (score >= 50) {
+      assignedLevel = 1;
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        hasCompletedAssessment: true,
+        currentLevel: assignedLevel,
+        score: score
+      },
+      { new: true }
+    ).select('-password');
+    if (!updatedUser) {
+      return res.status(404).json({
+        error: 'User not found.'
+      });
+    }
+    res.json({
+      message: 'Assessment completed successfully.',
+      user: updatedUser
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -113,6 +135,139 @@ async function callGeminiWithFallback(prompt) {
   }
   throw new Error('All Gemini models are busy.');
 }
+
+app.post('/api/evaluate-assessment', async (req, res) => {
+
+  try {
+
+    const { userId, transcripts } = req.body;
+
+    // Validate incoming data
+    if (!userId || !transcripts) {
+      return res.status(400).json({
+        error: 'User ID and transcripts are required.'
+      });
+    }
+
+    // Find user
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        error: 'User not found.'
+      });
+    }
+
+    // Get all three answers
+    const answer1 = transcripts[1] || '';
+    const answer2 = transcripts[2] || '';
+    const answer3 = transcripts[3] || '';
+
+    // Gemini assessment prompt
+    const prompt = `
+      You are Toki, a friendly but honest English communication coach.
+
+      Evaluate the student's initial English communication assessment.
+
+      QUESTION 1:
+      Tell me a little about yourself and something you enjoy doing.
+
+      Student's Answer:
+      ${JSON.stringify(answer1)}
+
+      QUESTION 2:
+      Ask directions for the nearest metro station.
+
+      Student's Answer:
+      ${JSON.stringify(answer2)}
+
+      QUESTION 3:
+      Tell me about a difficult task and how you asked for help.
+
+      Student's Answer:
+      ${JSON.stringify(answer3)}
+
+      Evaluate the student's responses using these criteria:
+
+      1. Clarity and sentence structure: 35 points
+      2. Grammar and vocabulary: 35 points
+      3. Communication confidence and appropriateness: 30 points
+
+      Give a fair score between 0 and 100.
+
+      Consider that this is a beginner-friendly assessment.
+      Do not judge the student's accent or personality.
+      Do not reward empty or simulated answers as genuine responses.
+
+      Return strictly valid JSON without markdown:
+
+      {
+        "score": 65,
+        "feedback": "A short, encouraging message from Toki.",
+        "strength": "One thing the student did well.",
+        "improvement": "One specific area to improve."
+      }
+    `;
+
+    // Get Gemini evaluation
+    const evaluation = await callGeminiWithFallback(prompt);
+
+    // Validate and normalize score
+    const rawScore = Number(evaluation.score);
+
+    if (!Number.isFinite(rawScore)) {
+      throw new Error('Gemini returned an invalid assessment score.');
+    }
+
+    const calculatedScore = Math.max(
+      0,
+      Math.min(100, Math.round(rawScore))
+    );
+
+    // NEW: Assign numeric level
+    let assignedLevel = 0;
+
+    if (calculatedScore >= 70) {
+      assignedLevel = 2;
+    } else if (calculatedScore >= 50) {
+      assignedLevel = 1;
+    }
+
+    // Save assessment result in MongoDB
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        hasCompletedAssessment: true,
+        currentLevel: assignedLevel,
+        score: calculatedScore
+      },
+      { new: true }
+    ).select('-password');
+
+    res.status(200).json({
+
+      message: 'Assessment evaluated successfully.',
+
+      evaluation: {
+        ...evaluation,
+        score: calculatedScore
+      },
+
+      user: updatedUser
+
+    });
+
+  } catch (err) {
+
+    console.error('Assessment Evaluation Error:', err);
+
+    res.status(500).json({
+      error: 'Could not evaluate assessment. Please try again.'
+    });
+
+  }
+
+});
 
 function getCurriculumGuide(levelNum) {
   if (levelNum === 0) {
