@@ -130,7 +130,7 @@ const Assessment = ({ user, onAssessmentComplete }) => {
         <div className="AssesmentLeftPanel">
           <div className="AssesmentTokiCard">
             <div className="AssesmentBlueText">QUESTION {currentQuestion} OF 3</div>
-            <div className="AssesmentTokiImg"> <img src={TOKIWINK} className='TokiImg'/></div>
+            <div className="AssesmentTokiImg"> <img src={TOKIWINK} className='TokiImg'/> </div>
             <div className="AssesmentBlackText" id='AssesmentCardHead'>
               {getQuestionPrompt()}
             </div>
