@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Assesment.css';
+import TOKIWINK from '../Images/TOKIWINK.png'
 
 const Assessment = ({ user, onAssessmentComplete }) => {
 
@@ -129,7 +130,7 @@ const Assessment = ({ user, onAssessmentComplete }) => {
         <div className="AssesmentLeftPanel">
           <div className="AssesmentTokiCard">
             <div className="AssesmentBlueText">QUESTION {currentQuestion} OF 3</div>
-            <div className="AssesmentTokiImg"></div>
+            <div className="AssesmentTokiImg"> <img src={TOKIWINK} className='TokiImg'/></div>
             <div className="AssesmentBlackText" id='AssesmentCardHead'>
               {getQuestionPrompt()}
             </div>
