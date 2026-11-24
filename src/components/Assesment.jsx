@@ -85,7 +85,7 @@ const Assessment = ({ user, onAssessmentComplete }) => {
       alert('User ID missing. Please log in again.');
       return;
     }
-    const response = await fetch('http://localhost:5000/api/evaluate-assessment', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/evaluate-assessment`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, transcripts })

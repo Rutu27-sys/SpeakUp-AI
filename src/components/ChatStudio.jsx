@@ -28,7 +28,7 @@ const ChatStudio = ({ user, onUserUpdate, onBackToLearning, onViewGrowth }) => {
     setSessionSeconds(0);
     try {
       const userId = user?._id || user?.userId || localStorage.getItem('userId');
-      const res = await fetch('http://localhost:5000/api/generate-scenario', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/generate-scenario`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, requestedLevel: targetLvl })
@@ -108,7 +108,7 @@ const ChatStudio = ({ user, onUserUpdate, onBackToLearning, onViewGrowth }) => {
     setInputText('');
     setIsLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/chat', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -142,7 +142,7 @@ const ChatStudio = ({ user, onUserUpdate, onBackToLearning, onViewGrowth }) => {
     setIsEndingSession(true);
     try {
       const userId = user?._id || user?.userId || localStorage.getItem('userId');
-      const res = await fetch('http://localhost:5000/api/end-session-feedback', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/end-session-feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

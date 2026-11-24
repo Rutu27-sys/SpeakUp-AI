@@ -15,7 +15,7 @@ const Dashboard = ({ user, onLogout }) => {
       const userId = user?.userId || user?._id || localStorage.getItem('userId');
       if (!userId) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/user/${userId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/${userId}`);
         if (res.ok) {
           const data = await res.json();
           setProfile(data);
