@@ -114,7 +114,10 @@
    width: 200px;
     height: 200px;
     background: #7046E8;
-    border-radius: 50%;
+}
+.TokiImg{
+    width: 230px;
+    height: 230px;
 }
 .ListeningCard {
    background-color: #FFFFFF;
