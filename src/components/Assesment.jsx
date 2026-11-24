@@ -111,7 +111,6 @@ const Assessment = ({ user, onAssessmentComplete }) => {
       <div className="AssesmentNav">
         <div className="AssesmentLogo">SpeakUp AI</div>
         <div className="AssesmentSmallText">STARTING POINT · ABOUT 3 MINUTES</div>
-        <button className='SaveAndExit'>Save & exit</button>
       </div>
 
       <div className="TopProgressBar">
